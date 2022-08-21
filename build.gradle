@@ -5,7 +5,7 @@ buildscript {
     ext.kotlin_version = '1.6.10'
     ext.retrofit_ver = "2.9.0"
     ext.okhttp_ver = "4.9.0"
-
+    ext.ktor_version = "2.0.3"
     ext.lifecycle = "2.5.1"
 
     ext.coroutines_android = "1.6.1"
@@ -22,6 +22,7 @@ buildscript {
 
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 

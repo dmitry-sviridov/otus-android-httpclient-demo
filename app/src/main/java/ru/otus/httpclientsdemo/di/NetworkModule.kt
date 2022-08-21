@@ -8,11 +8,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import ru.otus.httpclientsdemo.repository.PostRepository
 import ru.otus.httpclientsdemo.repository.PostRepositoryImpl
-import ru.otus.httpclientsdemo.repository.PostsApi
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -25,6 +23,11 @@ object NetworkModule {
         return GsonBuilder()
             .create()
     }
+
+    @Singleton
+    @Provides
+    @Named("BASE_URL")
+    fun provideBaseUrl(): String = "http://jsonplaceholder.typicode.com"
 
     @Singleton
     @Provides
@@ -42,23 +45,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit.Builder =
-        Retrofit.Builder()
-            .baseUrl("http://jsonplaceholder.typicode.com")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-
-
-    @Singleton
-    @Provides
-    fun providePostsApi(retrofit: Retrofit.Builder): PostsApi =
-        retrofit
-            .build()
-            .create(PostsApi::class.java)
-
-
-    @Singleton
-    @Provides
-    fun providePostRepository(postsApi: PostsApi): PostRepository = PostRepositoryImpl(postsApi)
+    fun providePostRepository(
+        @Named("BASE_URL") baseUrl: String,
+        gson: Gson,
+        okHttpClient: OkHttpClient
+    ): PostRepository = PostRepositoryImpl(baseUrl, gson, okHttpClient)
 
 }

@@ -61,6 +61,7 @@ dependencies {
 
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
+    implementation "ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0"
 
     // fragment
     implementation "androidx.core:core-ktx:1.8.0"

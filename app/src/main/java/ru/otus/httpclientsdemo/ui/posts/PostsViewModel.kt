@@ -1,6 +1,5 @@
 package ru.otus.httpclientsdemo.ui.posts
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,16 +20,7 @@ class PostsViewModel @Inject constructor(val service: PostRepository) : ViewMode
 
     fun getPost(postId: String) = viewModelScope.launch {
         _postsData.postValue(ResourceState.loading(null))
-        val response = service.fetchPostById(postId)
-        
-        if (response.isSuccessful) {
-            Log.d(TAG, "getPost: success: ${response.body()}")
-            _postsData.postValue(ResourceState.success(response.body()))
-        } else {
-            Log.d(TAG, "getPost: received unsuccessful response: ${response.errorBody()}")
-            _postsData.postValue(ResourceState.error(response.errorBody().toString(), null))
-        }
-        
+        _postsData.postValue(service.fetchPostById(postId))
     }
 
     companion object {

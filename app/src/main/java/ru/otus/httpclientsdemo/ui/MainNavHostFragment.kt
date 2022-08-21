@@ -1,6 +1,5 @@
 package ru.otus.httpclientsdemo.ui
 
-import android.app.Activity
 import android.content.Context
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint

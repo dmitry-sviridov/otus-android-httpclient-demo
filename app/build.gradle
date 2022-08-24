@@ -3,8 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'kotlinx-serialization'
-
 }
 
 android {
@@ -57,14 +55,13 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_core"
 
-    // ktor
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-android:$ktor_version")
-    implementation("io.ktor:ktor-client-resources:$ktor_version")
-    implementation("io.ktor:ktor-client-logging:$ktor_version")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-    implementation 'io.ktor:ktor-client-serialization:1.5.0'
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
+    implementation "ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0"
 
     // fragment
     implementation "androidx.core:core-ktx:1.8.0"

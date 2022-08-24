@@ -1,14 +1,13 @@
 package ru.otus.httpclientsdemo.di
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import ru.otus.httpclientsdemo.repository.PostRepository
 import ru.otus.httpclientsdemo.repository.PostRepositoryImpl
 import javax.inject.Named
@@ -18,33 +17,38 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
     @Singleton
-    @Named("BASE_URL")
-    fun provideBaseUrl() = "http://jsonplaceholder.typicode.com"
-
     @Provides
-    @Singleton
-    fun provideKtorClient(): HttpClient = HttpClient(Android) {
-        engine {
-            connectTimeout = 500
-        }
-
-        install(Logging) {
-            logger = Logger.SIMPLE
-            level = LogLevel.BODY
-        }
-
-        install(ContentNegotiation) {
-            json()
-        }
+    fun provideGsonBuilder(): Gson {
+        return GsonBuilder()
+            .create()
     }
+
+    @Singleton
+    @Provides
+    @Named("BASE_URL")
+    fun provideBaseUrl(): String = "http://jsonplaceholder.typicode.com"
+
+    @Singleton
+    @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
+        .apply { setLevel(HttpLoggingInterceptor.Level.BODY) }
+
+
+    @Singleton
+    @Provides
+    fun provideOkHttp(loggerInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(loggerInterceptor)
+            .build()
+
 
     @Singleton
     @Provides
     fun providePostRepository(
         @Named("BASE_URL") baseUrl: String,
-        httpClient: HttpClient
-    ): PostRepository = PostRepositoryImpl(baseUrl, httpClient)
+        gson: Gson,
+        okHttpClient: OkHttpClient
+    ): PostRepository = PostRepositoryImpl(baseUrl, gson, okHttpClient)
 
 }

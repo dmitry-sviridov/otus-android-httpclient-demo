@@ -33,7 +33,7 @@ class PostRepositoryImpl @Inject constructor(
                 val post = gson.fromJson(response.body?.string(), Post::class.java)
                 ResourceState.success(post)
             } catch (e: JsonSyntaxException) {
-                Log.d(TAG, "fetchPostById: $e")
+                //Log.d(TAG, "fetchPostById: $e")
                 ResourceState.error(e.message.toString(), null)
             }
         }

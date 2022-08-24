@@ -1,9 +1,6 @@
 package ru.otus.httpclientsdemo.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-class Post(
+data class Post(
     val userId: Long,
     val id: Long,
     val title: String,
